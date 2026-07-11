@@ -984,105 +984,372 @@ CLASS zcl_04_itab_b26 IMPLEMENTATION.
 *   out->write( |\n| ).
 **
 
-"Eliminar registros
-   " Obtener clientes
-
-   SELECT FROM /DMO/I_Customer
-     FIELDS CustomerID, FirstName, LastName, CountryCode
-     INTO TABLE @DATA(lt_clientes)
-     UP TO 15 ROWS.
-
-   out->write( |Clientes iniciales: { lines( lt_clientes ) }| ).
-   out->write( lt_clientes ).
-   out->write( |\n| ).
-
-   "=================================================================
-   " CASO 1: DELETE INDEX (eliminar por posición)
-   "=================================================================
-   out->write( |CASO 1: Eliminar el segundo cliente (posición 2)| ).
-
-   DELETE lt_clientes INDEX 2.
-
-   out->write( |Después de DELETE INDEX 2: { lines( lt_clientes ) } clientes| ).
-   out->write( lt_clientes ).
-   out->write( |\n| ).
-
-
-   "=================================================================
-   " CASO 2: DELETE WHERE (eliminar por condición)
-   "=================================================================
-   out->write( |CASO 2: Eliminar clientes de Alemania| ).
-
-   DELETE lt_clientes WHERE CountryCode = 'DE'.
-
-   out->write( |Después de DELETE WHERE: { lines( lt_clientes ) } clientes| ).
-   out->write( lt_clientes ).
-   out->write( |\n| ).
-
-
- "=================================================================
-   " CASO 3: DELETE ADJACENT DUPLICATES (eliminar duplicados)
-   "=================================================================
-   out->write( |CASO 3: Eliminar duplicados por país| ).
-
-   " IMPORTANTE: Primero SORT, luego DELETE ADJACENT
-   SORT lt_clientes BY CountryCode.
-
-   DELETE ADJACENT DUPLICATES FROM lt_clientes COMPARING CountryCode.
-
-   out->write( |Solo un cliente por país: { lines( lt_clientes ) }| ).
-   out->write( lt_clientes ).
-   out->write( |\n| ).
-
-
-  "=================================================================
-   " CASO 4: CLEAR vs FREE vs VALUE #()
-   "=================================================================
-   out->write( |CASO 4: Tres formas de vaciar una tabla| ).
-
-   DATA lt_temp TYPE TABLE OF /dmo/i_customer.
-
-   SELECT FROM /DMO/I_Customer
-     FIELDS *
-     INTO CORRESPONDING FIELDS OF TABLE @lt_temp
-     UP TO 50 ROWS.
-
-   out->write( |Tabla con { lines( lt_temp ) } registros| ).
-   " Opción 1: CLEAR (mantiene memoria)
-
-   CLEAR lt_temp.
-
-   out->write( |Después de CLEAR: { lines( lt_temp ) } - memoria reservada| ).
-
-   " Rellenar otra vez
-   SELECT FROM /DMO/I_Customer
-     FIELDS *
-     INTO CORRESPONDING FIELDS OF TABLE @lt_temp
-     UP TO 50 ROWS.
-
-   " Opción 2: FREE (libera memoria)
-   FREE lt_temp.
-
-   out->write( |Después de FREE: { lines( lt_temp ) } - memoria liberada| ).
-
-   " Rellenar otra vez
-   SELECT FROM /DMO/I_Customer
-     FIELDS *
-     INTO CORRESPONDING FIELDS OF TABLE @lt_temp
-     UP TO 50 ROWS.
-
-   " Opción 3: VALUE #() (forma moderna, igual que CLEAR)
-
-   lt_temp = VALUE #( ).
-   out->write( |Después de VALUE #(): { lines( lt_temp ) } - forma moderna| ).
-   out->write( |\n| ).
-
-
+*"Eliminar registros
+*   " Obtener clientes
+*
+*   SELECT FROM /DMO/I_Customer
+*     FIELDS CustomerID, FirstName, LastName, CountryCode
+*     INTO TABLE @DATA(lt_clientes)
+*     UP TO 15 ROWS.
+*
+*   out->write( |Clientes iniciales: { lines( lt_clientes ) }| ).
+*   out->write( lt_clientes ).
+*   out->write( |\n| ).
+*
+*   "=================================================================
+*   " CASO 1: DELETE INDEX (eliminar por posición)
+*   "=================================================================
+*   out->write( |CASO 1: Eliminar el segundo cliente (posición 2)| ).
+*
+*   DELETE lt_clientes INDEX 2.
+*
+*   out->write( |Después de DELETE INDEX 2: { lines( lt_clientes ) } clientes| ).
+*   out->write( lt_clientes ).
+*   out->write( |\n| ).
+*
+*
+*   "=================================================================
+*   " CASO 2: DELETE WHERE (eliminar por condición)
+*   "=================================================================
+*   out->write( |CASO 2: Eliminar clientes de Alemania| ).
+*
+*   DELETE lt_clientes WHERE CountryCode = 'DE'.
+*
+*   out->write( |Después de DELETE WHERE: { lines( lt_clientes ) } clientes| ).
+*   out->write( lt_clientes ).
+*   out->write( |\n| ).
+*
+*
+* "=================================================================
+*   " CASO 3: DELETE ADJACENT DUPLICATES (eliminar duplicados)
+*   "=================================================================
+*   out->write( |CASO 3: Eliminar duplicados por país| ).
+*
+*   " IMPORTANTE: Primero SORT, luego DELETE ADJACENT
+*   SORT lt_clientes BY CountryCode.
+*
+*   DELETE ADJACENT DUPLICATES FROM lt_clientes COMPARING CountryCode.
+*
+*   out->write( |Solo un cliente por país: { lines( lt_clientes ) }| ).
+*   out->write( lt_clientes ).
+*   out->write( |\n| ).
+*
+*
+*  "=================================================================
+*   " CASO 4: CLEAR vs FREE vs VALUE #()
+*   "=================================================================
+*   out->write( |CASO 4: Tres formas de vaciar una tabla| ).
+*
+*   DATA lt_temp TYPE TABLE OF /dmo/i_customer.
+*
+*   SELECT FROM /DMO/I_Customer
+*     FIELDS *
+*     INTO CORRESPONDING FIELDS OF TABLE @lt_temp
+*     UP TO 50 ROWS.
+*
+*   out->write( |Tabla con { lines( lt_temp ) } registros| ).
+*   " Opción 1: CLEAR (mantiene memoria)
+*
+*   CLEAR lt_temp.
+*
+*   out->write( |Después de CLEAR: { lines( lt_temp ) } - memoria reservada| ).
+*
+*   " Rellenar otra vez
+*   SELECT FROM /DMO/I_Customer
+*     FIELDS *
+*     INTO CORRESPONDING FIELDS OF TABLE @lt_temp
+*     UP TO 50 ROWS.
+*
+*   " Opción 2: FREE (libera memoria)
+*   FREE lt_temp.
+*
+*   out->write( |Después de FREE: { lines( lt_temp ) } - memoria liberada| ).
+*
+*   " Rellenar otra vez
+*   SELECT FROM /DMO/I_Customer
+*     FIELDS *
+*     INTO CORRESPONDING FIELDS OF TABLE @lt_temp
+*     UP TO 50 ROWS.
+*
+*   " Opción 3: VALUE #() (forma moderna, igual que CLEAR)
+*
+*   lt_temp = VALUE #( ).
+*   out->write( |Después de VALUE #(): { lines( lt_temp ) } - forma moderna| ).
+*   out->write( |\n| ).
 
 
 
+*  " Estructura COMPLETA para uso interno
+*   TYPES: BEGIN OF ty_empleado_completo,
+*            id           TYPE i,
+*            nombre       TYPE string,
+*            salario      TYPE p LENGTH 10 DECIMALS 2,
+*            departamento TYPE string,
+*            telefono     TYPE string,
+*          END OF ty_empleado_completo.
+*
+*   " Estructura REDUCIDA para uso público (sin salario ni teléfono)
+*   TYPES: BEGIN OF ty_empleado_publico,
+*            id           TYPE i,
+*            nombre       TYPE string,
+*            departamento TYPE string,
+*          END OF ty_empleado_publico.
+*
+*   DATA lt_empleados_completo TYPE TABLE OF ty_empleado_completo.
+*
+*   DATA lt_empleados_publico TYPE TABLE OF ty_empleado_publico.
+*
+*   "=================================================================
+*   " CASO 1: Sin EXCEPT - Copia automática por nombres coincidentes
+*   "=================================================================
+*
+*   out->write( |CASO 1: CORRESPONDING simple (sin EXCEPT)| ).
+*   out->write( |======================================| ).
+*
+*   " Datos completos
+*   lt_empleados_completo = VALUE #(
+*     ( id = 1 nombre = 'Ana García' salario = 45000 departamento = 'IT' telefono = '600111222' )
+*     ( id = 2 nombre = 'Carlos López' salario = 38000 departamento = 'Ventas' telefono = '600333444' )
+*     ( id = 3 nombre = 'María Ruiz' salario = 52000 departamento = 'IT' telefono = '600555666' )
+*   ).
+*   out->write( |Datos internos (completos):| ).
+*   out->write( lt_empleados_completo ).
+*
+*   " CORRESPONDING copia SOLO los campos que coinciden en nombre
+*   " Como ty_empleado_publico NO tiene salario ni telefono,
+*   " esos campos NO se copian automáticamente
+*
+*   lt_empleados_publico = CORRESPONDING #( lt_empleados_completo ).
+*
+*   out->write( |Datos públicos (sin salario ni teléfono):| ).
+*   out->write( lt_empleados_publico ).
+*   out->write( |\n| ).
+*
+*   "=================================================================
+*   " CASO 2: EXCEPT - Excluir campos que SÍ existen en destino
+*   "=================================================================
+*   out->write( |CASO 2: EXCEPT - Excluir campo específico| ).
+*   out->write( |====================================| ).
+*
+*   " Para demostrar EXCEPT, necesitamos estructuras donde
+*   " AMBAS tengan los mismos campos
+*
+*   TYPES: BEGIN OF ty_empleado_con_telefono,
+*            id           TYPE i,
+*            nombre       TYPE string,
+*            departamento TYPE string,
+*            telefono     TYPE string,
+*          END OF ty_empleado_con_telefono.
+*
+*   DATA lt_empleados_destino TYPE TABLE OF ty_empleado_con_telefono.
+*
+*   " Ahora SÍ podemos usar EXCEPT porque 'telefono' existe en ambas estructuras
+*   " pero queremos excluirlo de la copia
+*
+*   lt_empleados_destino = CORRESPONDING #( lt_empleados_completo EXCEPT telefono ).
+*
+*   out->write( |Copiado TODO excepto teléfono:| ).
+*   out->write( lt_empleados_destino ).
+*   out->write( |Observa: teléfono está vacío aunque existía en origen| ).
+*   out->write( |\n| ).
+*
+*
+*   "=================================================================
+*   " CASO 3: DISCARDING DUPLICATES
+*   "=================================================================
+*   out->write( |CASO 3: DISCARDING DUPLICATES| ).
+*   out->write( |==========================| ).
+*
+*   TYPES: BEGIN OF ty_venta,
+*            producto TYPE string,
+*            cantidad TYPE i,
+*          END OF ty_venta.
+*
+*   " Tabla origen con duplicados (sin clave)
+*   DATA lt_ventas_dia TYPE TABLE OF ty_venta WITH EMPTY KEY.
+*
+*   " Tabla destino con clave única (no permite duplicados)
+*   DATA lt_ventas_consolidadas TYPE SORTED TABLE OF ty_venta
+*     WITH UNIQUE KEY producto.
+*
+*   " Ventas del día con productos repetidos
+*   lt_ventas_dia = VALUE #(
+*     ( producto = 'Laptop' cantidad = 2 )
+*     ( producto = 'Mouse' cantidad = 5 )
+*     ( producto = 'Laptop' cantidad = 1 )    " Duplicado - se ignora
+*     ( producto = 'Teclado' cantidad = 3 )
+*     ( producto = 'Mouse' cantidad = 2 )     " Duplicado - se ignora
+*   ).
+*
+*   out->write( |Ventas del día: { lines( lt_ventas_dia ) } registros| ).
+*
+*   out->write( lt_ventas_dia ).
+*
+*   " Sin DISCARDING DUPLICATES → DUMP (error en runtime)
+*   " lt_ventas_consolidadas = CORRESPONDING #( lt_ventas_dia ). " ¡ESTO FALLA!
+*   " Con DISCARDING DUPLICATES → Toma el primero, ignora duplicados
+*
+*   lt_ventas_consolidadas = CORRESPONDING #( lt_ventas_dia DISCARDING DUPLICATES ).
+*
+*   out->write( |Consolidadas: { lines( lt_ventas_consolidadas ) } productos únicos| ).
+*   out->write( lt_ventas_consolidadas ).
+*   out->write( |\n| ).
 
 
+*    out->write( |Ejemplo de CONV - Conversiones de tipo| ).
+*    out->write( |===================================| ).
+*
+*    " CASO: Cálculo de precio con IVA
+*    DATA lv_precio TYPE p LENGTH 10 DECIMALS 2 VALUE '100.00'.
+*    DATA lv_iva TYPE p LENGTH 5 DECIMALS 2 VALUE '0.21'.
+*
+*    " Sin CONV (necesitas variable auxiliar)
+*    " DATA lv_mensaje TYPE string.
+*    " DATA lv_total_aux TYPE p LENGTH 10 DECIMALS 2.
+*    " lv_total_aux = lv_precio * ( 1 + lv_iva ).
+*    " lv_mensaje = lv_total_aux.
+*
+*    " Con CONV (directo, sin variable auxiliar)
+*    DATA(lv_mensaje) = |Precio final: { CONV string( lv_precio * ( 1 + lv_iva ) ) } EUR|.
+*
+*    out->write( lv_mensaje ).
+*
+*    " Otro ejemplo: convertir tabla SORTED a STANDARD
+*    DATA lt_numeros_sorted TYPE SORTED TABLE OF i WITH NON-UNIQUE DEFAULT KEY.
+*    lt_numeros_sorted = VALUE #( ( 3 ) ( 1 ) ( 4 ) ( 1 ) ( 5 ) ).
+*
+*    TYPES  tt_numeros_standard TYPE STANDARD TABLE OF i WITH EMPTY KEY.
+*    DATA(lt_numeros_standard) = CONV tt_numeros_standard( lt_numeros_sorted ).
+*
+*    out->write( |Tabla convertida de SORTED a STANDARD| ).
+*    out->write( lt_numeros_standard ).
+
+
+*"FILTER
+*    " ============================================
+*    " PASO 1: Definir la estructura de producto
+*    " ============================================
+*    TYPES: BEGIN OF ty_producto,
+*             codigo   TYPE string,
+*             nombre   TYPE string,
+*             precio   TYPE p LENGTH 10 DECIMALS 2,
+*             stock    TYPE i,
+*             en_oferta TYPE abap_bool,
+*           END OF ty_producto.
+*
+*    " ============================================
+*    " PASO 2: Declarar la tabla de inventario
+*    " CLAVE: La clave debe incluir los campos que vas a filtrar
+*    " ============================================
+*    DATA lt_inventario TYPE SORTED TABLE OF ty_producto
+*      WITH NON-UNIQUE KEY en_oferta stock.
+*
+*    " ============================================
+*    " PASO 3: Llenar el inventario con datos
+*    " ============================================
+*    lt_inventario = VALUE #(
+*      ( codigo = 'LAP001' nombre = 'Laptop HP'      precio = 800  stock = 3  en_oferta = abap_true )
+*      ( codigo = 'MOU001' nombre = 'Mouse Logitech' precio = 25   stock = 50 en_oferta = abap_true )
+*      ( codigo = 'TEC001' nombre = 'Teclado Mecánico' precio = 120 stock = 15 en_oferta = abap_true )
+*      ( codigo = 'MON001' nombre = 'Monitor Samsung' precio = 300  stock = 8  en_oferta = abap_false )
+*      ( codigo = 'WEB001' nombre = 'Webcam HD'      precio = 60   stock = 2  en_oferta = abap_true )
+*      ( codigo = 'AUR001' nombre = 'Auriculares'    precio = 45   stock = 20 en_oferta = abap_false )
+*      ( codigo = 'IMP001' nombre = 'Impresora'      precio = 200  stock = 12 en_oferta = abap_true )
+*    ).
+*
+*    " ============================================
+*    " Mostrar inventario completo
+*    " ============================================
+*    out->write( |========================================| ).
+*    out->write( |  INVENTARIO COMPLETO DE LA TIENDA     | ).
+*    out->write( |========================================| ).
+*    out->write( |Total de productos: { lines( lt_inventario ) }| ).
+*    out->write( |\n| ).
+*
+*    LOOP AT lt_inventario INTO DATA(ls_prod).
+*      DATA(lv_oferta_texto) = COND string( WHEN ls_prod-en_oferta = abap_true
+*                                           THEN 'EN OFERTA'
+*                                           ELSE '' ).
+*
+*      out->write( |{ ls_prod-codigo } - { ls_prod-nombre WIDTH = 20 } | &&
+*                  |Precio: { ls_prod-precio WIDTH = 6 } EUR | &&
+*                  |Stock: { ls_prod-stock WIDTH = 3 } { lv_oferta_texto }| ).
+*    ENDLOOP.
+*
+*    out->write( |\n| ).
+*
+*    " ===========================================
+*    " PASO 4: APLICAR FILTER
+*    " ============================================
+*    out->write( |========================================| ).
+*    out->write( |  FILTRADO: Ofertas con Stock > 5      | ).
+*    out->write( |========================================| ).
+*
+*    " FILTER
+*    DATA(lt_productos_para_promocion) = FILTER #( lt_inventario WHERE en_oferta = abap_true AND stock > 5 ).
+*
+*
+*
+*    " ============================================
+*    " PASO 5: Mostrar resultados filtrados
+*    " ============================================
+*
+*
+*    out->write( |Productos encontrados: { lines( lt_productos_para_promocion ) }| ).
+*    out->write( |\n| ).
+*
+*    IF lt_productos_para_promocion IS NOT INITIAL.
+*      out->write( |Estos productos van a la campaña de email:| ).
+*      LOOP AT lt_productos_para_promocion INTO DATA(ls_promo).
+*        out->write( |{ ls_promo-nombre } - { ls_promo-precio } EUR (Stock: { ls_promo-stock })| ).
+*      ENDLOOP.
+*    ELSE.
+*      out->write( |No hay productos que cumplan los criterios| ).
+*    ENDIF.
+*
+*    " ============================================
+*    " PASO 6: Calcular valor total de la promoción
+*    " ============================================
+*    out->write( |\n| ).
+*
+*    DATA(lv_valor_total) = REDUCE i( INIT sum = 0
+*                                      FOR prod IN lt_productos_para_promocion
+*                                      NEXT sum = sum + ( prod-precio * prod-stock ) ).
+*
+*    out->write( |Valor total del inventario promocional: { lv_valor_total } EUR| ).
+
+
+    out->write( |Ejemplo de CAST - Conversión de clases| ).
+    out->write( |==================================| ).
+
+    " Caso simple con referencias a datos
+    TYPES: BEGIN OF ty_producto,
+             id TYPE i,
+             nombre TYPE string,
+             precio TYPE p LENGTH 10 DECIMALS 2,
+           END OF ty_producto.
+
+    " Referencia genérica
+    DATA lr_data TYPE REF TO data.
+    lr_data = NEW ty_producto( id = 1 nombre = 'Laptop' precio = 1000 ).
+
+    " CAST para acceder como tipo específico
+    DATA(ls_producto) = CAST ty_producto( lr_data )->*.
+
+    out->write( |Producto mediante CAST:| ).
+    out->write( |  ID: { ls_producto-id }| ).
+    out->write( |  Nombre: { ls_producto-nombre }| ).
+    out->write( |  Precio: { ls_producto-precio }| ).
+
+    " Acceso directo a componentes con CAST
+    DATA(lv_precio) = CAST ty_producto( lr_data )->precio.
+    out->write( |Precio directo: { lv_precio }| ).
+
+    out->write( |\n| ).
+    out->write( |RESUMEN CAST:| ).
+    out->write( |• Convierte referencias genéricas a específicas| ).
+    out->write( |• Necesario para downcasting en herencia| ).
+    out->write( |• Permite acceso directo a componentes| ).
 
 
   ENDMETHOD.
