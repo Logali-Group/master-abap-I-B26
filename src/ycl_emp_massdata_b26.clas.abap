@@ -11,7 +11,8 @@ ENDCLASS.
 
 
 
-CLASS ycl_emp_massdata_b26 IMPLEMENTATION.
+CLASS YCL_EMP_MASSDATA_B26 IMPLEMENTATION.
+
 
 METHOD if_oo_adt_classrun~main.
 

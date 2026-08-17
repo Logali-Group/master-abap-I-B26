@@ -11,7 +11,8 @@ ENDCLASS.
 
 
 
-CLASS ytablemod_b26 IMPLEMENTATION.
+CLASS YTABLEMOD_B26 IMPLEMENTATION.
+
 
   METHOD if_oo_adt_classrun~main.
 
@@ -41,5 +42,4 @@ CLASS ytablemod_b26 IMPLEMENTATION.
 
 
   ENDMETHOD.
-
 ENDCLASS.
