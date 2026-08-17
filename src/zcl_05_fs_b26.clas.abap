@@ -11,7 +11,8 @@ ENDCLASS.
 
 
 
-CLASS zcl_05_fs_b26 IMPLEMENTATION.
+CLASS ZCL_05_FS_B26 IMPLEMENTATION.
+
 
   METHOD if_oo_adt_classrun~main.
 
@@ -409,8 +410,4 @@ IF sy-subrc = 0.
 
 
  ENDMETHOD.
-
-
-
-
 ENDCLASS.

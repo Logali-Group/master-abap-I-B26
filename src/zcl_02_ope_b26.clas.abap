@@ -11,7 +11,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_02_ope_b26 IMPLEMENTATION.
+CLASS ZCL_02_OPE_B26 IMPLEMENTATION.
 
 
   METHOD if_oo_adt_classrun~main.

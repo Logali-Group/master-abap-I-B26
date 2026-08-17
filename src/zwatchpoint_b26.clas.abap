@@ -11,7 +11,8 @@ ENDCLASS.
 
 
 
-CLASS zwatchpoint_b26 IMPLEMENTATION.
+CLASS ZWATCHPOINT_B26 IMPLEMENTATION.
+
 
   METHOD if_oo_adt_classrun~main.
 
@@ -58,5 +59,4 @@ CLASS zwatchpoint_b26 IMPLEMENTATION.
     out->write( |=== Proceso terminado ===| ).
 
   ENDMETHOD.
-
 ENDCLASS.

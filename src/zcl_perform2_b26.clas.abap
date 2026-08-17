@@ -22,7 +22,8 @@ ENDCLASS.
 
 
 
-CLASS zcl_perform2_b26 IMPLEMENTATION.
+CLASS ZCL_PERFORM2_B26 IMPLEMENTATION.
+
 
   METHOD hash.
     DATA(result) = lt_hash[ travel_id    = me->key_travel_id
@@ -30,11 +31,13 @@ CLASS zcl_perform2_b26 IMPLEMENTATION.
                             booking_date = me->key_date ].
   ENDMETHOD.
 
+
   METHOD sort.
     DATA(result) = lt_sort[ travel_id    = me->key_travel_id
                             booking_id   = me->key_booking_id
                             booking_date = me->key_date ].
   ENDMETHOD.
+
 
   METHOD constructor.
     SELECT FROM /dmo/booking_m
@@ -52,11 +55,13 @@ CLASS zcl_perform2_b26 IMPLEMENTATION.
     set_line_to_read( ).
   ENDMETHOD.
 
+
   METHOD standard.
     DATA(result) = lt_standard[ travel_id    = me->key_travel_id
                                 booking_id   = me->key_booking_id
                                 booking_date = me->key_date ].
   ENDMETHOD.
+
 
   METHOD set_line_to_read.
     DATA(lv_data) = lt_standard[ CONV i( lines( lt_standard ) * '0.65' ) ].
@@ -64,6 +69,7 @@ CLASS zcl_perform2_b26 IMPLEMENTATION.
     me->key_booking_id = lv_data-booking_id.
     me->key_date = lv_data-booking_date.
   ENDMETHOD.
+
 
   METHOD if_oo_adt_classrun~main.
     DATA(lo_flights) = NEW zcl_perform2_b26( ).
@@ -74,6 +80,4 @@ CLASS zcl_perform2_b26 IMPLEMENTATION.
     out->write( me->key_booking_id ).
     out->write( me->key_date ).
   ENDMETHOD.
-
 ENDCLASS.
-

@@ -11,7 +11,8 @@ ENDCLASS.
 
 
 
-CLASS zcl_progdin_b26 IMPLEMENTATION.
+CLASS ZCL_PROGDIN_B26 IMPLEMENTATION.
+
 
   METHOD if_oo_adt_classrun~main.
 
@@ -147,5 +148,4 @@ CLASS zcl_progdin_b26 IMPLEMENTATION.
 
 
   ENDMETHOD.
-
 ENDCLASS.

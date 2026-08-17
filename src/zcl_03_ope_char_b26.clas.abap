@@ -11,7 +11,8 @@ ENDCLASS.
 
 
 
-CLASS zcl_03_ope_char_b26 IMPLEMENTATION.
+CLASS ZCL_03_OPE_CHAR_B26 IMPLEMENTATION.
+
 
   METHOD if_oo_adt_classrun~main.
 
@@ -336,5 +337,4 @@ CLASS zcl_03_ope_char_b26 IMPLEMENTATION.
 
 
   ENDMETHOD.
-
 ENDCLASS.

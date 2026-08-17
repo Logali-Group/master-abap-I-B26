@@ -17,7 +17,8 @@ ENDCLASS.
 
 
 
-CLASS zcl_notifications IMPLEMENTATION.
+CLASS ZCL_NOTIFICATIONS IMPLEMENTATION.
+
 
   METHOD constructor.
 
@@ -30,8 +31,8 @@ CLASS zcl_notifications IMPLEMENTATION.
 
   ENDMETHOD.
 
+
   METHOD enviar.
 
   ENDMETHOD.
-
 ENDCLASS.

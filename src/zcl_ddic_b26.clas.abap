@@ -11,7 +11,8 @@ ENDCLASS.
 
 
 
-CLASS zcl_ddic_b26 IMPLEMENTATION.
+CLASS ZCL_DDIC_B26 IMPLEMENTATION.
+
 
   METHOD if_oo_adt_classrun~main.
 
@@ -80,5 +81,4 @@ out->write( lt_empl_addr ).
 
 
   ENDMETHOD.
-
 ENDCLASS.

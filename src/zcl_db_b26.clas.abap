@@ -11,7 +11,8 @@ ENDCLASS.
 
 
 
-CLASS zcl_db_b26 IMPLEMENTATION.
+CLASS ZCL_DB_B26 IMPLEMENTATION.
+
 
 METHOD if_oo_adt_classrun~main.
 
@@ -42,5 +43,4 @@ METHOD if_oo_adt_classrun~main.
 
 
 ENDMETHOD.
-
 ENDCLASS.

@@ -11,7 +11,8 @@ ENDCLASS.
 
 
 
-CLASS zcl_exce_log_b26 IMPLEMENTATION.
+CLASS ZCL_EXCE_LOG_B26 IMPLEMENTATION.
+
 
   METHOD if_oo_adt_classrun~main.
 
@@ -63,5 +64,4 @@ CLASS zcl_exce_log_b26 IMPLEMENTATION.
         out->write( STRING ).
 
   ENDMETHOD.
-
 ENDCLASS.

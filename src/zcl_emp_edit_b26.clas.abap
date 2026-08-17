@@ -6,7 +6,11 @@ CLASS zcl_emp_edit_b26 DEFINITION
     CONSTANTS c_lock_object TYPE if_abap_lock_object=>tv_name VALUE 'EZEMPLOYEE_B26'.
 ENDCLASS.
 
-CLASS zcl_emp_edit_b26 IMPLEMENTATION.
+
+
+CLASS ZCL_EMP_EDIT_B26 IMPLEMENTATION.
+
+
   METHOD if_oo_adt_classrun~main.
 
     out->write( |El proceso se ha iniciado| ).
